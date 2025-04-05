@@ -26,3 +26,9 @@ Then(/^I should see a flash message saying (.*)$/, async (message) => {
     await expect(SecurePage.flashAlert).toHaveText(expect.stringContaining(message));
 });
 
+When(/^I print to console value '(.*)'$/, async (value) => {
+    AllureReporter.addStep(`I print to console value ${value}`);
+    const actualValue = process.env.USERNAME;
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    console.log(actualValue);
+});
