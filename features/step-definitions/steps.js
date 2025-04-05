@@ -11,6 +11,7 @@ const pages = {
 
 Given(/^I am on the (\w+) page$/, async (page) => {
     AllureReporter.addStep(`I am on the ${page} page`);
+    console.log(`I am on the ${page} page`);
     await pages[page].open()
 });
 
