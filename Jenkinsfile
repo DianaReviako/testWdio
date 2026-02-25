@@ -17,12 +17,12 @@ pipeline {
         timestamps()
     }
 
-    // triggers {
+    triggers {
         // githubPush()
         // pollSCM('H/2 * * * *')
-        // upstream(upstreamProjects: 'secondHerokuapp', threshold: hudson.model.Result.SUCCESS)
+        upstream(upstreamProjects: 'secondHerokuapp', threshold: hudson.model.Result.SUCCESS)
         // cron('H/2 * * * *')
-    // }
+    }
 
     stages {
         stage('Checkout') {
