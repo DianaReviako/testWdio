@@ -50,7 +50,7 @@ pipeline {
                 copyArtifacts(
                     projectName: 'secondHerokuapp',
                     filter: 'text.txt',
-                    selector: lastSuccessful()
+                    selector: lastSuccessful(),
                     optional: true
                 )
                 
