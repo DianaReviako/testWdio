@@ -76,31 +76,29 @@ pipeline {
         }
 
         success {
-            mail to: 'eschoodzin@gmail.com',
-                 subject: "✅ Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                 body: """The prank was a success, the build was successful.
-                 
-Details:
-- Project: ${env.JOB_NAME}
-- Build: #${env.BUILD_NUMBER}
-- Branch: ${params.BRANCH}
-- Tag used: ${params.TAG}
-
-View Allure Report: ${env.BUILD_URL}allure/
-"""
+            script {
+                def emailBody = readFile('email-template.html')
+                
+                emailext to: 'eschoodzin@gmail.com',
+                    subject: "✅ Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: emailBody,
+                    mimeType: 'text/html'
+            }
         }
 
         failure {
+            script {
             mail to: 'eschoodzin@gmail.com',
                  subject: "❌ Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                  body: """Bummer, the build crashed.
                  
-Check the errors here: ${env.BUILD_URL}console
+            Check the errors here: ${env.BUILD_URL}console
 
-Parameters:
-- Branch: ${params.BRANCH}
-- Tag: ${params.TAG}
-"""
+            Parameters:
+            - Branch: ${params.BRANCH}
+            - Tag: ${params.TAG}
+            """
+            }
         }
     }
 }
