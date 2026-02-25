@@ -17,8 +17,8 @@ pipeline {
     }
 
     triggers {
-        cron('H 3 * * *')
-        pollSCM('H/2 * * * *')
+        // cron('H 3 * * *')
+        // pollSCM('H/2 * * * *')
         upstream(upstreamProjects: 'secondHerokuapp', threshold: hudson.model.Result.SUCCESS)
     }
 
