@@ -10,6 +10,12 @@ pipeline {
         allure 'allureReport'
     }
 
+    options {
+        skipDefaultCheckout() 
+        checkoutToSubdirectory('')
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+
     // triggers {
         // githubPush()
         // pollSCM('H/2 * * * *')
