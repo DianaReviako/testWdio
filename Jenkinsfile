@@ -59,7 +59,7 @@ pipeline {
             echo 'Publishing Allure Report...'
             allure includeProperties: false, 
                    jdk: '', 
-                   results: [[path: 'allure/allure-results']] 
+                   results: [[path: 'allure-results']] 
         }
         success {
             echo 'Hooray! Tests passed successfully.'
