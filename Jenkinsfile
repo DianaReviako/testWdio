@@ -44,25 +44,28 @@ pipeline {
             }
         }
 
-        stage('Get Message from Upstream') {
+stage('Get Message from Upstream') {
             steps {
-                echo 'Attempting to get file from secondHerokuapp...'
-                copyArtifacts(
-                    projectName: 'secondHerokuapp',
-                    filter: 'text.txt',
-                    selector: lastSuccessful(),
-                    optional: true
-                )
-                
-                if (fileExists('text.txt')) {
-                    echo '--- Content of the shared file ---'
-                    bat 'type text.txt'
-                    echo '----------------------------------'
-                } else {
-                    echo 'WARNING: text.txt not found. Continuing without it.'
-                }
-            }
-        }
+                script {
+                    echo 'Attempting to get file from secondHerokuapp...'
+                    
+                    copyArtifacts(
+                        projectName: 'secondHerokuapp',
+                        filter: 'text.txt',
+                        selector: lastSuccessful(),
+                        optional: true
+                    )
+                    
+                    if (fileExists('text.txt')) {
+                        echo '--- Content of the shared file ---'
+                        bat 'type text.txt'
+                        echo '----------------------------------'
+                    } else {
+                        echo 'WARNING: text.txt not found. Continuing without it.'
+                    }
+                } 
+            } 
+        } 
 
         stage('Run Tests') {
             steps {
