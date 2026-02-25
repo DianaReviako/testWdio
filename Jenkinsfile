@@ -2,36 +2,29 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'BRANCH', defaultValue: 'master', description: 'In which branch to run the tests?')
-        string(name: 'TAG', defaultValue: 'herokuapp', description: 'What tests are we running?')
+        string(name: 'BRANCH', defaultValue: 'master', description: 'Branch for tests')
+        string(name: 'TAG', defaultValue: 'herokuapp', description: 'Cucumber tags')
     }
 
-    tools {
-        allure 'allureReport'
-    }
+    tools { allure 'allureReport' }
 
     options {
-        skipDefaultCheckout() 
-        checkoutToSubdirectory('')
+        skipDefaultCheckout()
         buildDiscarder(logRotator(numToKeepStr: '5'))
         timestamps()
     }
 
     triggers {
-        // githubPush()
-        // pollSCM('H/2 * * * *')
         upstream(upstreamProjects: 'secondHerokuapp', threshold: hudson.model.Result.SUCCESS)
-        // cron('H/2 * * * *')
     }
 
     stages {
         stage('Checkout') {
             steps {
                 deleteDir()
-                echo 'Pull code from repo'
+                echo 'Pulling code...'
                 checkout scmGit(
                     branches: [[name: "*/${params.BRANCH}"]], 
-                    extensions: [], 
                     userRemoteConfigs: [[credentialsId: 'githubAuthToken', url: 'https://github.com/DianaReviako/testWdio']]
                 )
             }
@@ -39,41 +32,24 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                echo 'Install dependencies...'
                 bat 'npm install'
             }
         }
 
-stage('Get Message from Upstream') {
+        stage('Get Message from Upstream') {
             steps {
                 script {
-                    echo 'Attempting to get file from secondHerokuapp...'
-                    
-                    copyArtifacts(
-                        projectName: 'secondHerokuapp',
-                        filter: 'text.txt',
-                        selector: lastSuccessful(),
-                        optional: true
-                    )
-                    
-                    if (fileExists('text.txt')) {
-                        echo '--- Content of the shared file ---'
-                        bat 'type text.txt'
-                        echo '----------------------------------'
-                    } else {
-                        echo 'WARNING: text.txt not found. Continuing without it.'
-                    }
-                } 
-            } 
-        } 
+                    fetchArtifact('secondHerokuapp', 'text.txt')
+                }
+            }
+        }
 
         stage('Run Tests') {
             steps {
-                echo 'Cleaning old allure results...'
-                bat 'if exist allure-results rmdir /s /q allure-results'
-                bat 'if exist allure rmdir /s /q allure' 
-        
-                echo 'Run tests'
+                script {
+                    cleanUp(['allure-results', 'allure'])
+                }
+                echo 'Running tests...'
                 bat "npm run test -- --cucumberOpts.tagExpression=\"@${params.TAG}\""
             }
         }
@@ -81,16 +57,30 @@ stage('Get Message from Upstream') {
 
     post {
         always {
-            echo 'Publishing Allure Report...'
-            allure includeProperties: false, 
-                   jdk: '', 
-                   results: [[path: 'allure-results']] 
+            allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
         }
-        success {
-            echo 'Hooray! Tests passed successfully.'
-        }
-        failure {
-            echo 'Oops, something went wrong. Check the logs!'
-        }
+    }
+}
+
+def fetchArtifact(String projName, String fileName) {
+    echo ">>> Fetching ${fileName} from ${projName}..."
+    copyArtifacts(
+        projectName: projName,
+        filter: fileName,
+        selector: lastSuccessful(),
+        optional: true
+    )
+    if (fileExists(fileName)) {
+        echo ">>> Artifact ${fileName} found. Content:"
+        bat "type ${fileName}"
+    } else {
+        echo ">>> WARNING: ${fileName} not found."
+    }
+}
+
+def cleanUp(List folders) {
+    folders.each { folder ->
+        echo ">>> Cleaning up folder: ${folder}"
+        bat "if exist ${folder} rmdir /s /q ${folder}"
     }
 }
