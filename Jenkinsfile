@@ -14,6 +14,7 @@ pipeline {
         skipDefaultCheckout() 
         checkoutToSubdirectory('')
         buildDiscarder(logRotator(numToKeepStr: '5'))
+        timestamps()
     }
 
     // triggers {
@@ -26,6 +27,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
+                deleteDir()
                 echo 'Pull code from repo'
                 checkout scmGit(
                     branches: [[name: "*/${params.BRANCH}"]], 
