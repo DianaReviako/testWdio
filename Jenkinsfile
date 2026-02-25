@@ -44,6 +44,21 @@ pipeline {
             }
         }
 
+        stage('Get Message from Upstream') {
+            steps {
+                echo 'Attempting to get file from secondHerokuapp...'
+                copyArtifacts(
+                    projectName: 'secondHerokuapp',
+                    filter: 'text.txt',
+                    selector: lastSuccessful()
+                )
+                
+                echo '--- Content of the shared file ---'
+                bat 'type text.txt'
+                echo '----------------------------------'
+            }
+        }
+
         stage('Run Tests') {
             steps {
                 echo 'Cleaning old allure results...'
