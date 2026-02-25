@@ -1,5 +1,7 @@
 const { Given, When, Then } = require('@wdio/cucumber-framework');
 const { expect, $ } = require('@wdio/globals')
+const path = require('path');
+const fs = require('fs');
 
 const LoginPage = require('../pageobjects/login.page');
 const SecurePage = require('../pageobjects/secure.page');
@@ -30,4 +32,13 @@ When(/^I print to console user name '(.*)'$/, async (value) => {
     AllureReporter.addStep(`I print to console value ${value}`);
     const actualValue = process.env.USERNAME;
     console.log(`process.env.USERNAME: ${actualValue}`);
+});
+
+When(/^I print the( '(.*)')? file content$/, async (fileName) => {
+    const filePath = fileName ? path.join(process.cwd(), fileName) : process.env.TEST_FILE_NAME;
+    if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath, 'utf-8');
+        console.log(`--- Content of ${fileName}: ${content}`);
+        AllureReporter.addAttachment(fileName, content, 'text/plain');
+    }
 });

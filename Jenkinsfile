@@ -74,7 +74,7 @@ stage('Get Message from Upstream') {
                 bat 'if exist allure rmdir /s /q allure' 
         
                 echo 'Run tests'
-                bat "npm run test -- --tags \"@${params.TAG}\""
+                bat "npm run test -- --cucumberOpts.tagExpression=\"@${params.TAG}\""
             }
         }
     }
