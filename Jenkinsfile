@@ -4,6 +4,8 @@ pipeline {
     parameters {
         string(name: 'BRANCH', defaultValue: 'master', description: 'Branch for tests')
         string(name: 'TAG', defaultValue: 'herokuapp', description: 'Cucumber tags')
+        string(name: 'USERNAME', defaultValue: 'Test User Panda', description: 'text for step I print to console user name')
+        string(name: 'TEST_FILE_NAME', defaultValue: '', description: 'for step print file content')
     }
 
     tools { allure 'allureReport' }
