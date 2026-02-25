@@ -46,7 +46,6 @@ pipeline {
         stage('Get Message from Upstream') {
             steps {
                 script {
-                    // Важно: если параметр пустой, fetchArtifact может выдать ошибку
                     fetchArtifact('secondHerokuapp', "${params.TEST_FILE_NAME}")
                 }
             }
@@ -74,6 +73,34 @@ pipeline {
     post {
         always {
             allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
+        }
+
+        success {
+            mail to: 'eschoodzin@gmail.com',
+                 subject: "✅ Build Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: """The prank was a success, the build was successful.
+                 
+Details:
+- Project: ${env.JOB_NAME}
+- Build: #${env.BUILD_NUMBER}
+- Branch: ${params.BRANCH}
+- Tag used: ${params.TAG}
+
+View Allure Report: ${env.BUILD_URL}allure/
+"""
+        }
+
+        failure {
+            mail to: 'eschoodzin@gmail.com',
+                 subject: "❌ Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: """Bummer, the build crashed.
+                 
+Check the errors here: ${env.BUILD_URL}console
+
+Parameters:
+- Branch: ${params.BRANCH}
+- Tag: ${params.TAG}
+"""
         }
     }
 }
