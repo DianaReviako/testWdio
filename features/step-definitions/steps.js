@@ -29,5 +29,5 @@ Then(/^I should see a flash message saying (.*)$/, async (message) => {
 When(/^I print to console user name '(.*)'$/, async (value) => {
     AllureReporter.addStep(`I print to console value ${value}`);
     const actualValue = process.env.USERNAME;
-    console.log(actualValue);
+    console.log(`process.env.USERNAME: ${actualValue}`);
 });
