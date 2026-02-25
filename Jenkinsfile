@@ -5,7 +5,12 @@ pipeline {
         string(name: 'BRANCH', defaultValue: 'master', description: 'Branch for tests')
         string(name: 'TAG', defaultValue: 'herokuapp', description: 'Cucumber tags')
         string(name: 'USERNAME', defaultValue: 'Test User Panda', description: 'text for step I print to console user name')
-        string(name: 'TEST_FILE_NAME', defaultValue: '', description: 'for step print file content')
+        string(name: 'TEST_FILE_NAME', defaultValue: 'text.txt', description: 'for step print file content')
+    }
+
+    environment {
+        CURRENT_USER = "${params.USERNAME}"
+        BASE_URL = "https://the-internet.herokuapp.com"
     }
 
     tools { allure 'allureReport' }
@@ -17,8 +22,6 @@ pipeline {
     }
 
     triggers {
-        // cron('H 3 * * *')
-        // pollSCM('H/2 * * * *')
         upstream(upstreamProjects: 'secondHerokuapp', threshold: hudson.model.Result.SUCCESS)
     }
 
@@ -43,7 +46,8 @@ pipeline {
         stage('Get Message from Upstream') {
             steps {
                 script {
-                    fetchArtifact('secondHerokuapp', 'text.txt')
+                    // Важно: если параметр пустой, fetchArtifact может выдать ошибку
+                    fetchArtifact('secondHerokuapp', "${params.TEST_FILE_NAME}")
                 }
             }
         }
@@ -55,6 +59,14 @@ pipeline {
                 }
                 echo 'Running tests...'
                 bat "npm run test -- --cucumberOpts.tagExpression=\"@${params.TAG}\""
+            }
+        }
+
+        stage('Change env variable') {
+            steps {
+                withEnv(["TEST_USER=${env.CURRENT_USER}"]) {
+                    echo "Inside withEnv block: TEST_USER is ${TEST_USER}"
+                }
             }
         }
     }
@@ -74,11 +86,11 @@ def fetchArtifact(String projName, String fileName) {
         selector: lastSuccessful(),
         optional: true
     )
-    if (fileExists(fileName)) {
+    if (fileName && fileExists(fileName)) {
         echo ">>> Artifact ${fileName} found. Content:"
         bat "type ${fileName}"
     } else {
-        echo ">>> WARNING: ${fileName} not found."
+        echo ">>> WARNING: FileName is empty or file not found."
     }
 }
 
