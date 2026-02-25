@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'BRANCH', defaultValue: 'main', description: 'In which branch to run the tests?')
+        string(name: 'BRANCH', defaultValue: 'master', description: 'In which branch to run the tests?')
         string(name: 'TAG', defaultValue: 'herokuapp', description: 'What tests are we running?')
     }
 
