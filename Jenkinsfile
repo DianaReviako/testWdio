@@ -51,11 +51,16 @@ pipeline {
                     projectName: 'secondHerokuapp',
                     filter: 'text.txt',
                     selector: lastSuccessful()
+                    optional: true
                 )
                 
-                echo '--- Content of the shared file ---'
-                bat 'type text.txt'
-                echo '----------------------------------'
+                if (fileExists('text.txt')) {
+                    echo '--- Content of the shared file ---'
+                    bat 'type text.txt'
+                    echo '----------------------------------'
+                } else {
+                    echo 'WARNING: text.txt not found. Continuing without it.'
+                }
             }
         }
 
