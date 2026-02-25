@@ -50,7 +50,10 @@ exports.config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-        browserName: 'chrome'
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+            args: ['--headless', '--disable-gpu', '--no-sandbox']
+        }
     }],
 
     //
@@ -109,7 +112,7 @@ exports.config = {
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
     framework: 'cucumber',
-    
+
     //
     // The number of times to retry the entire specfile when it fails as a whole
     // specFileRetries: 1,
@@ -129,7 +132,7 @@ exports.config = {
             useCucumberStepReporter: true,
             disableWebdriverStepsReporting: false,
             disableWebdriverScreenshotsReporting: false
-            }
+        }
         ]
     ],
 
@@ -262,7 +265,7 @@ exports.config = {
      */
     afterStep: function (step, scenario, result, context) {
         if (!result.passed) {
-          return browser.takeScreenshot();
+            return browser.takeScreenshot();
         }
     },
     /**
@@ -285,7 +288,7 @@ exports.config = {
      */
     // afterFeature: function (uri, feature) {
     // },
-    
+
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {string} commandName hook command name
