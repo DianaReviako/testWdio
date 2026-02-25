@@ -44,6 +44,10 @@ pipeline {
 
         stage('Run Tests') {
             steps {
+                echo 'Cleaning old allure results...'
+                bat 'if exist allure-results rmdir /s /q allure-results'
+                bat 'if exist allure rmdir /s /q allure' 
+        
                 echo 'Run tests'
                 bat "npm run test -- --tags \"@${params.TAG}\""
             }

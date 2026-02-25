@@ -5,7 +5,7 @@ Feature: The Internet Guinea Pig Website
     Given I am on the login page
     When I login with <username> and <password>
     Then I should see a flash message saying <message>
-    When I print to console value 'will print value from Jenkins'
+    When I print to console user name 'will print value from Jenkins'
 
     Examples:
       | username | password             | message                        |
