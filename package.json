@@ -6,7 +6,9 @@
     "@wdio/local-runner": "^9.12.4"
   },
   "scripts": {
+    "clean": "rimraf allure-results allure-report",
+    "pretest": "npm run clean",
     "test": "npx wdio run ./wdio.conf.js",
     "generate-report": "allure generate allure-results/ --clean && allure open"
-}
+  }
 }
