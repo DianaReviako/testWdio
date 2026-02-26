@@ -5,7 +5,7 @@ pipeline {
         string(name: 'BRANCH', defaultValue: 'master', description: 'Branch for tests')
         string(name: 'TAG', defaultValue: 'herokuapp', description: 'Cucumber tags')
         string(name: 'USERNAME', defaultValue: 'Test User Panda', description: 'text for step I print to console user name')
-        string(name: 'TEST_FILE_NAME', defaultValue: 'myTest.txt', description: 'for step print file content')
+        string(name: 'TEST_FILE_NAME', defaultValue: 'text.txt', description: 'for step print file content')
     }
 
     environment {
