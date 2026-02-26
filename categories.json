@@ -13,7 +13,7 @@
     "messageRegex": ".*Timeout.*" 
   },
   {
-    "name": "Outdated selectors",
+    "name": "Oh, no we have a problems",
     "matchedStatuses": ["failed"],
     "messageRegex": ".*is not clickable at point.*"
   }
