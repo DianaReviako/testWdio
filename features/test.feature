@@ -1,3 +1,4 @@
+@herokuapp
 Feature: test file artifact
 
     @artifacts

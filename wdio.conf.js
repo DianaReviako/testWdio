@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('fs');
+
 exports.config = {
     //
     // ====================
@@ -323,8 +326,19 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {<Object>} results object containing test results
      */
-    // onComplete: function(exitCode, config, capabilities, results) {
-    // },
+    onComplete: function (exitCode, config, capabilities, results) {
+        const envPath = path.join(process.cwd(), 'environment.properties');
+        const categoriesPath = path.join(process.cwd(), 'categories.json');
+
+        if (fs.existsSync(envPath) && fs.existsSync(categoriesPath)) {
+
+            fs.copyFileSync(envPath, path.join(process.cwd(), 'allure-results', 'environment.properties'));
+            fs.copyFileSync(categoriesPath, path.join(process.cwd(), 'allure-results', 'categories.json'));
+            console.log('✅ environment.properties and categories.json copied to the allure-results');
+        } else {
+            console.warn('⚠️ environment.properties and categories.json file not found in the project root');
+        }
+    },
     /**
     * Gets executed when a refresh happens.
     * @param {string} oldSessionId session ID of the old session

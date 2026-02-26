@@ -1,0 +1,20 @@
+[
+{
+    "name": "Hooray, the tests paaaaaaaassed!",
+    "matchedStatuses": ["passed"]
+  },
+  {
+    "name": "Ignored tests",
+    "matchedStatuses": ["skipped"]
+  },
+  {
+    "name": "Infrastructure problems",
+    "matchedStatuses": ["broken"],
+    "messageRegex": ".*Timeout.*" 
+  },
+  {
+    "name": "Outdated selectors",
+    "matchedStatuses": ["failed"],
+    "messageRegex": ".*is not clickable at point.*"
+  }
+]
