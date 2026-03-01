@@ -34,11 +34,12 @@ When(/^I print to console user name '(.*)'$/, async (value) => {
     console.log(`process.env.USERNAME: ${actualValue}`);
 });
 
-When(/^I print the( '(.*)')? file content$/, async (fileName) => {
-    const filePath = fileName ? path.join(process.cwd(), fileName) : process.env.TEST_FILE_NAME;
+When(/^I print the file content$/, async () => {
+    const filePath = process.env.TEST_FILE_NAME;
+    console.log(`FilePath: ${filePath}`);
     if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, 'utf-8');
-        console.log(`--- Content of ${fileName}: ${content}`);
-        AllureReporter.addAttachment(fileName, content, 'text/plain');
+        console.log(`--- Content of ${filePath}: ${content}`);
+        AllureReporter.addAttachment(filePath, content, 'text/plain');
     }
 });
