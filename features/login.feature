@@ -1,6 +1,6 @@
 Feature: The Internet Guinea Pig Website
 
-  @herokuapp
+  @herokuapp @responsible=Diana_Panda @layer=web
   Scenario Outline: As a user, I can log into the secure area as <username>
     Given I am on the login page
     When I login with <username> and <password>

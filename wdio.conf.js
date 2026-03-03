@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const { default: AllureReporter } = require('@wdio/allure-reporter');
 
 exports.config = {
     //
@@ -114,6 +115,8 @@ exports.config = {
     //
     // Make sure you have the wdio adapter package for the specific framework installed
     // before running any tests.
+
+
     framework: 'cucumber',
 
     //
@@ -244,8 +247,19 @@ exports.config = {
      * @param {ITestCaseHookParameter} world    world object containing information on pickle and test step
      * @param {object}                 context  Cucumber World object
      */
-    // beforeScenario: function (world, context) {
-    // },
+    beforeScenario: function (world, context) {
+        const responsibleTag = world.pickle.tags.find(tag => tag.name.startsWith('@responsible='));
+        // const layerTag = world.pickle.tags.find(tag => tag.name.startsWith('@layer='));
+
+        // const name = responsibleTag.name.split('=')[1].replace(/_/g, ' ');
+        AllureReporter.addOwner(process.env.OWNER_NAME);
+
+        if (layerTag) {
+            const name = layerTag.name.split('=')[1].replace(/_/g, ' ');
+            AllureReporter.addArgument('layer', name);
+        }
+        Al
+    },
     /**
      *
      * Runs before a Cucumber Step.
