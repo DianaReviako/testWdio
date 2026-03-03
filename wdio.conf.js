@@ -258,7 +258,6 @@ exports.config = {
             const name = layerTag.name.split('=')[1].replace(/_/g, ' ');
             AllureReporter.addArgument('layer', name);
         }
-        Al
     },
     /**
      *
