@@ -63,10 +63,11 @@ pipeline {
 
         stage('Change env variable') {
             steps {
-                withEnv(["TEST_USER=New_test_user_111"]) {
-                    echo "Inside withEnv block: TEST_USER is ${TEST_USER}"
+                withEnv(["CURRENT_USER=New_test_user_111"]) {
+                    echo "Inside withEnv block: CURRENT_USER is ${CURRENT_USER}"
                 }
             }
+            echo "Outside of withEnv block: CURRENT_USER again ${env.CURRENT_USER}"
         }
     }
 
