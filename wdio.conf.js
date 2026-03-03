@@ -248,12 +248,9 @@ exports.config = {
      * @param {object}                 context  Cucumber World object
      */
     beforeScenario: function (world, context) {
-        const responsibleTag = world.pickle.tags.find(tag => tag.name.startsWith('@responsible='));
-        // const layerTag = world.pickle.tags.find(tag => tag.name.startsWith('@layer='));
-
-        // const name = responsibleTag.name.split('=')[1].replace(/_/g, ' ');
         AllureReporter.addOwner(process.env.OWNER_NAME);
 
+        const layerTag = world.pickle.tags.find(tag => tag.name.startsWith('@layer='));
         if (layerTag) {
             const name = layerTag.name.split('=')[1].replace(/_/g, ' ');
             AllureReporter.addArgument('layer', name);
