@@ -66,8 +66,8 @@ pipeline {
                 withEnv(["CURRENT_USER=New_test_user_111"]) {
                     echo "Inside withEnv block: CURRENT_USER is ${CURRENT_USER}"
                 }
+                    echo "Outside of withEnv block: CURRENT_USER again ${env.CURRENT_USER}"
             }
-            echo "Outside of withEnv block: CURRENT_USER again ${env.CURRENT_USER}"
         }
     }
 
