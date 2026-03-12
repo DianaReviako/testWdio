@@ -84,7 +84,7 @@ pipeline {
             emailext (
                 to: 'eschoodzin@gmail.com',
                 subject: "Test: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: '${JELLY_SCRIPT,template="my-report"}',
+                body: '${JELLY_SCRIPT, template="my-report"}',
                 mimeType: 'text/html'
             )
     }
