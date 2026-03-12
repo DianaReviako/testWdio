@@ -1,0 +1,8 @@
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define">
+  <html>
+    <body>
+      <h1>Проект: ${project.name}</h1>
+      <p>Результат: <b>${build.result}</b></p>
+    </body>
+  </html>
+</j:jelly>

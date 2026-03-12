@@ -83,16 +83,7 @@ pipeline {
         script {
             emailext to: 'eschoodzin@gmail.com',
                 subject: "✅ Test: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                    <html>
-                        <body>
-                        <h1 style="color: green;">The prank was a success!</h1>
-                        <p>Build #${env.BUILD_NUMBER} finished successfully.</p>
-                        <a href="${env.BUILD_URL}">Open Build</a>
-                        </body>
-                    </html>
-                    """,
-                mimeType: 'text/html'
+                body:'${JELLY_SCRIPT, template="html"}'
     }
 }
 
