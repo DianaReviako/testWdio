@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
 const { default: AllureReporter } = require('@wdio/allure-reporter');
-const downloadDir = path.resolve(__dirname, 'testDownload');
 
 exports.config = {
     //
@@ -58,10 +57,6 @@ exports.config = {
         browserName: 'chrome',
         'goog:chromeOptions': {
             args: ['--headless', '--disable-gpu', '--no-sandbox']
-        },
-        prefs: {
-            'download.default_directory': downloadDir,
-            'download.prompt_for_download': false,
         }
     }],
 
